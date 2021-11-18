@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.codeurjc.example_cadence_common.activities.CustomerActivities;
+import es.codeurjc.example_cadence_common.exceptions.CreditLimitExceededException;
+import es.codeurjc.example_cadence_common.exceptions.CustomerNotFoundException;
 import es.codeurjc.example_cadence_customer.domain.Customer;
 import es.codeurjc.example_cadence_customer.service.CustomerService;
 
@@ -31,11 +33,11 @@ public class CustomerActivitiesImpl implements CustomerActivities {
                 logger.info("Credit re  served for customer {}", customerId);
             }else{
                 logger.info("Credit limit is exceeded for customer {}", customerId);
-                throw new RuntimeException("Credit limit is exceeded for customer " + customerId);
+                throw new CreditLimitExceededException();
             }
         } else {
             logger.info("Customer not found");
-            throw new RuntimeException("Customer not found");
+            throw new CustomerNotFoundException();
         }
     }
 }
