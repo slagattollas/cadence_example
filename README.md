@@ -5,7 +5,7 @@ Este **framework** tiene un paquete que te permite definir y crear arquitecturas
 
 El back de Cadence utiliza por defecto como BBDD Cassandra o MySQL/Postgress. Se puede implementar un adaptador para poder utilizar cualquier otra BBDD, es decir, es totalmente configurable.
 
-Para inicializar el back de Cadence se hace siguiendo estos pasos: 
+Estos son los pasos para inicializar el back de Cadence: 
 ### Download docker compose Cadence Server
 > curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose.yml
 > 
