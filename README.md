@@ -1,24 +1,26 @@
 ## Cadence
 Es compatible y configurable con Java, Spring Boot y Go.
 
-Este **framework** tiene un paquete que te permite definir y crear arquitectura basadas en eventos y sagas para conectar microservicios.
+Este **framework** tiene un paquete que te permite definir y crear arquitecturas basadas en eventos y sagas.
 
-El back del cadence utiliza por defecto como BBDD Cassandra o MySQL/Postgress. Se puede implementar un adaptador para poder utilizar cualquier otra BBDD, es decir, es totalmente configurable.
+El back de Cadence utiliza por defecto como BBDD Cassandra o MySQL/Postgress. Se puede implementar un adaptador para poder utilizar cualquier otra BBDD, es decir, es totalmente configurable.
 
-Para correr el back de cadence se hace siguiendo estos pasos: 
-## Download docker compose Cadence Server
+Para inicializar el back de Cadence se hace siguiendo estos pasos: 
+### Download docker compose Cadence Server
 > curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose.yml
 > 
 > docker-compose up
 
-## Run cadence server host
+### Run cadence server host
 > docker run --network=host --rm ubercadence/cli:master --do example domain register -rd 1
 
-El nucleo de **Cadence** esta basado en una unidad de estados llamada *workflow*, que es lo que nosotros llamamos Sagas. Un workflow esta compuesto por una serie de pasos y funciones que nos permite llevar a cabo una orquestación de un proceso entre microservicios. 
+## Implementación del framework
 
-Primero se tiene que crear la base de un workflow como una *interface* y definiendo los métodos que se van a utilizar.
+El nucleo de **Cadence** esta basado en una unidad de estados llamada *workflow*, que es donde podemos implementar las Sagas. Un workflow esta compuesto por una serie de pasos y funciones que nos permite llevar a cabo una orquestación de un proceso entre sericios. 
 
-Estos se definen con la anotación **@WorkflowMethod**: 
+El primer paso es crear la base de un workflow como una *interface* y definiendo los métodos que se van a utilizar.
+
+Esto se hace con la anotación **@WorkflowMethod**: 
 ```
 @WorkflowMethod
 Long createOrder(Long customerId, Double totalMoney);
@@ -38,17 +40,15 @@ Y por último tenemos los **@QueryMethod**, que se utilizan para indicar una fun
 String getStatus();
 ```
 
-Luego de definir el Workflow, como lo hemos visto, tiene que crearse una implementación de este Workflow:
+Luego de definir el **Workflow**, como lo hemos visto, se crea su implementación:
 
 ```
 public class CreateOrderWorkflowImpl implements CreateOrderWorkflow {
 ```
 
-Cada vez que se ejecute un nuevo workflow, una nueva instancia del workflow va a ser creada. 
+Lo siguiente es definir las **Actividades**. Estás son funciones (async o sync) que son invocadas a lo largo de los pasos de un workflow.
 
-Luego de este paso, se deben definir las **Actividades**. Estas son funciones (async o sync) que son invocadas a lo largo de los pasos de un workflow.
-
-Igual que el Workflow, las **Activities** tienen que definirse como una interface (en un módulo común), para luego implementarla en el servicio que las requiera. 
+Igual que el Workflow, las **Activities** tienen que definirse como una interface (en un módulo común), para luego implementarlas dentro del Workflow. 
 
 Por ejemplo, cremaos la interfaz: 
 
@@ -153,7 +153,7 @@ public void save(Order order) {
 }
 ```
 
-Haciendo esto, corremos el workflow y por ende la saga para realizar el proceso de manera de automatico según lo que hemos definido más arriba.
+Haciendo esto, corremos el workflow y por ende la saga para realizar el proceso de manera automatica según lo hayamos definido.
 
 
 
